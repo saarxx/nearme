@@ -12,9 +12,9 @@ app.configure(function () {
 app.get('/users/:id',nearme.getUser);
 
 app.get('/users',nearme.getUsers);
-//app.post('/students',students.addStudent);
+app.post('/users',nearme.addUser);
 
-//app.put('/students/:id',students.updateStudent)
-//app.delete('/students/:id',students.deleteStudent);
+app.put('/users/:id',nearme.updateUser)
+app.delete('/users/:id',nearme.deleteUser);
 
 app.listen(port,host);

@@ -1,4 +1,6 @@
 var mongo = require('mongodb');
+var BSON = mongo.BSONPure;
+
 
 /*
 var Server = mongo.Server,
@@ -86,6 +88,7 @@ var populateUsersCollection = function() {
 
 	var user1 = {
       user_name:"moshe",
+	  sid:"100",
 	  password:"123 ",
 	  first_name:"moshe", 
 	  last_name:"cohen",
@@ -165,8 +168,8 @@ exports.getUser = function(req, res) {
 	if (id) 
 	{
     db.collection(USERS_COLLECTION, function(err, collection) {
-       // collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
-	    collection.findOne({'sid':parseInt(id)}, function(err, item) {
+          collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
+	    //collection.findOne({'sid':parseInt(id)}, function(err, item) {
 			res.setHeader("Content-Type", "text/plain");
 			console.log("err="+err);
 			console.log("item="+item);
@@ -186,16 +189,16 @@ exports.getUsers = function(req, res) {
     });
 };
 
-/*
-exports.addStudent= function (req,res)
+
+exports.addUser= function (req,res)
 {
-	var student = req.body;
-	console.log("in addStudent");
-	console.log("student="+student);
+	var user = req.body;
+	console.log("in addUser");
+	console.log("user="+user);
 
 	
-	db.collection('students', function(err, collection) {
-        collection.insert(student, {safe:true}, function(err, result) {
+	db.collection(USERS_COLLECTION, function(err, collection) {
+        collection.insert(user, {safe:true}, function(err, result) {
 		 if (err) {
                 res.send({'error':'An error has occurred'});
             } else {
@@ -209,21 +212,21 @@ exports.addStudent= function (req,res)
 }
 
 
-exports.updateStudent= function(req, res) {
+exports.updateUser= function(req, res) {
     var id = req.params.id;
-    var student = req.body;
-	console.log("updateStudent id="+id);
+    var user = req.body;
+	console.log("updateUser id="+id);
 
-    console.log(JSON.stringify(student));
+    console.log(JSON.stringify(user));
 	
-    db.collection('students', function(err, collection) {
-        collection.update({'sid':id}, student, {safe:true}, function(err, result) {
+    db.collection(USERS_COLLECTION, function(err, collection) {
+        collection.update({'sid':id}, user, {safe:true}, function(err, result) {
             if (err) {
-                console.log('Error updating users students: ' + err);
+                console.log('Error updating users : ' + err);
                 res.send({'error':'An error has occurred'});
             } else {
                 console.log('' + result + ' document(s) updated');
-                res.send(student);
+                res.send(user);
             }
         });
     });
@@ -232,11 +235,11 @@ exports.updateStudent= function(req, res) {
 }
 
 
-exports.deleteStudent = function(req, res) {
+exports.deleteUser = function(req, res) {
     var id = req.params.id;
-    console.log('Deleting student: ' + id);
-	 db.collection('students', function(err, collection) {
-        collection.remove({'sid':id}, {safe:true}, function(err, result) {
+    console.log('Deleting user: ' + id);
+	 db.collection(USERS_COLLECTION, function(err, collection) {
+        collection.remove({'_id':new BSON.ObjectID(id)}, {safe:true}, function(err, result) {
             if (err) {
                 res.send({'error':'An error has occurred - ' + err});
             } else {
@@ -247,4 +250,4 @@ exports.deleteStudent = function(req, res) {
     });
     
 }
-*/
+
