@@ -207,8 +207,6 @@ exports.addUser= function (req,res)
             }
         });
     });
-	
-	
 }
 
 
@@ -220,7 +218,7 @@ exports.updateUser= function(req, res) {
     console.log(JSON.stringify(user));
 	
     db.collection(USERS_COLLECTION, function(err, collection) {
-        collection.update({'sid':id}, user, {safe:true}, function(err, result) {
+        collection.update({'_id':new BSON.ObjectID(id)}, user, {safe:true}, function(err, result) {
             if (err) {
                 console.log('Error updating users : ' + err);
                 res.send({'error':'An error has occurred'});
@@ -248,6 +246,50 @@ exports.deleteUser = function(req, res) {
             }
         });
     });
-    
-}
+}	
+exports.deleteBusinessPlace = function(req, res) {
+    var id = req.params.id;
+    console.log('Deleting business place: ' + id);
+	 db.collection(BUSINESS_PLACE_COLLECTION, function(err, collection) {
+        collection.remove({'_id':new BSON.ObjectID(id)}, {safe:true}, function(err, result) {
+            if (err) {
+                res.send({'error':'An error has occurred - ' + err});
+            } else {
+                console.log('' + result + ' document(s) deleted');
+                res.send(req.body);
+            }
+        });
+    });
+	}
+	
+exports.addBusinessPlace= function (req,res)
+{
+	var businessPlace = req.body;
+	console.log("in addBusinessPlace");
+	console.log("business place="+businessPlace);
+
+	
+	db.collection(BUSINESS_PLACE_COLLECTION, function(err, collection) {
+        collection.insert(businessPlace, {safe:true}, function(err, result) {
+		 if (err) {
+                res.send({'error':'An error has occurred'});
+            } else {
+                console.log('result: ' + JSON.stringify(result[0]));
+                res.send(result[0]);
+            }
+        });
+    });	
+}    
+
+exports.getBusinessPlaces = function(req, res) {
+    console.log('Retrieving business places: ');
+
+    db.collection(BUSINESS_PLACE_COLLECTION, function(err, collection) {
+        collection.find().toArray(function(err, items) {
+            res.send(items);
+        });
+    });
+};
+
+
 

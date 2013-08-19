@@ -16,5 +16,8 @@ app.post('/users',nearme.addUser);
 
 app.put('/users/:id',nearme.updateUser)
 app.delete('/users/:id',nearme.deleteUser);
+app.delete('/business_places/:id',nearme.deleteBusinessPlace);
+app.post('/business_places',nearme.addBusinessPlace);
+app.get('/business_places',nearme.getBusinessPlaces);
 
 app.listen(port,host);
