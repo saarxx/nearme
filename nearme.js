@@ -146,7 +146,7 @@ var populateReviewsCollection = function() {
       business_place_id:null,
 	  user_id:null,
 	  review:"This place rocks!!!", 
-	  rank:"10",
+	  rank:10,
 	  creation_date :new Date(1, 2012)
     };
 
@@ -322,5 +322,40 @@ exports.getBusinessPlaces = function(req, res) {
     });
 };
 
+exports.getReviewsGreaterThanRank = function(req, res) {
+    
+	var rank = req.params.rank;
+    db.collection(REVIEWS_COLLECTION, function(err, collection) {
+        collection.find({ 'rank' : { $gt: rank } } ).toArray(function(err, items) {
+            res.send(items);
+        });
+    });
+};
 
+exports.getReviews = function(req, res) {
+    console.log('Retrieving business places: ');
 
+   db.collection(REVIEWS_COLLECTION, function(err, collection) {
+        collection.find().toArray(function(err, items) {
+            res.send(items);
+        });
+    });
+};
+
+exports.dropAllCollections = function(req, res) {
+	var drop = function(name) {
+		db.dropCollection(name, function(err) {
+		if(!err) {
+			console.log( name + " dropped");
+		} else {
+             console.log("!ERROR! " + err.errmsg);
+        }
+     });
+	}
+
+	drop(USERS_COLLECTION);
+	drop(BUSINESS_PLACE_COLLECTION);
+	drop(REVIEWS_COLLECTION);
+	drop(CATEGORIES_COLLECTION);
+	res.send("ok");
+};
