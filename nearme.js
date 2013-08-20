@@ -146,15 +146,29 @@ var populateReviewsCollection = function() {
       business_place_id:null,
 	  user_id:null,
 	  review:"This place rocks!!!", 
-	  rank:10,
+	  rank:"10",
 	  creation_date :new Date(1, 2012)
     };
+	
+	 var review2 = {
+      business_place_id:null,
+	  user_id:null,
+	  review:"This place sucks!!!", 
+	  creation_date :new Date(1, 2012)
+    };
+
 
     db.collection(REVIEWS_COLLECTION, function(err, collection) {
         collection.insert(review1, {safe:true}, function(err, result) {
 		console.log("review result="+result);
 		console.log("err="+err);
 		});
+		
+        collection.insert(review2, {safe:true}, function(err, result) {
+		console.log("review result="+result);
+		console.log("err="+err);
+		});
+
 	 }); 
 };
 
@@ -183,7 +197,7 @@ exports.getUser = function(req, res) {
 	{
     db.collection(USERS_COLLECTION, function(err, collection) {
           collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
-	    //collection.findOne({'sid':parseInt(id)}, function(err, item) {
+	    //collection.findOne({'sid':(id)}, function(err, item) {
 			res.setHeader("Content-Type", "text/plain");
 			console.log("err="+err);
 			console.log("item="+item);
@@ -322,11 +336,12 @@ exports.getBusinessPlaces = function(req, res) {
     });
 };
 
-exports.getReviewsGreaterThanRank = function(req, res) {
+exports.getReviewsWithRank = function(req, res) {
     
-	var rank = req.params.rank;
     db.collection(REVIEWS_COLLECTION, function(err, collection) {
-        collection.find({ 'rank' : { $gt: rank } } ).toArray(function(err, items) {
+        //collection.find({ 'rank' : { $gt: parseInt(rank) } } ).toArray(function(err, items) {
+        collection.find({ rank:  {$exists:true}} ).toArray(function(err, items) {
+
             res.send(items);
         });
     });

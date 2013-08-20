@@ -20,7 +20,7 @@ app.delete('/users/:id',nearme.deleteUser);
 app.delete('/business_places/:id',nearme.deleteBusinessPlace);
 app.post('/business_places',nearme.addBusinessPlace);
 app.get('/business_places',nearme.getBusinessPlaces);
-app.get('/reviews_rank/:rank',nearme.getReviewsGreaterThanRank);
+app.get('/reviews_with_rank/',nearme.getReviewsWithRank);
 app.get('/reviews',nearme.getReviews);
 app.get('/drop_all_collections',nearme.dropAllCollections);
 
