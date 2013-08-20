@@ -58,7 +58,9 @@ require('mongodb').connect(mongourl, function(err, conn){
             if (err) {
                 console.log("The 'users' collection doesn't exist. Creating it with sample data...");
                 populateUsersCollection();
-            }
+            }else{
+				console.log("User collection exits");
+			}
         });
 		
 		db.collection(BUSINESS_PLACE_COLLECTION, {strict:true}, function(err, collection) {
@@ -103,6 +105,18 @@ var populateUsersCollection = function() {
 		console.log("err="+err);
 		});
 	 }); 
+
+	//adding an index over the uesr name field
+	db.collection(USERS_COLLECTION, function(err, collection) {
+		collection.ensureIndex("user_name", function(err, indexName) {
+			if (err){
+				console.log("error creating index");
+			} else {
+				console.log("created index for user collection");
+			}
+		});
+    });
+
 };
 
 var populateBusinessPlaceCollection = function() {
@@ -179,6 +193,23 @@ exports.getUser = function(req, res) {
 	}
 };
 
+
+exports.getUserByName = function(req, res) {
+    var user_name = req.params.user_name;
+    console.log('Retrieving user with name: ' + user_name);
+	if (user_name) 
+	{
+		db.collection(USERS_COLLECTION, function(err, collection) {
+			  collection.findOne({'user_name':user_name}, function(err, item) {
+				res.setHeader("Content-Type", "text/plain");
+				console.log("err="+err);
+				console.log("item="+item);
+				res.send(item);
+			});
+		});
+	}
+};
+
 exports.getUsers = function(req, res) {
     console.log('Retrieving users: ');
 
@@ -186,7 +217,7 @@ exports.getUsers = function(req, res) {
         collection.find().toArray(function(err, items) {
             res.send(items);
         });
-    });
+    });	
 };
 
 

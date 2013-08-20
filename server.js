@@ -10,6 +10,7 @@ app.configure(function () {
 });
 
 app.get('/users/:id',nearme.getUser);
+app.get('/users/name/:user_name',nearme.getUserByName);
 
 app.get('/users',nearme.getUsers);
 app.post('/users',nearme.addUser);
