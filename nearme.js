@@ -2,6 +2,7 @@ var mongo = require('mongodb');
 var BSON = mongo.BSONPure;
 
 
+
 /*
 var Server = mongo.Server,
     Db = mongo.Db,
@@ -129,7 +130,7 @@ var populateBusinessPlaceCollection = function() {
 	  last_location_upate_time:new Date(789), 
 	  business_hours:[{day:"sunday",open:"9:00", close:"16:00"}, {day:"monday",open:"9:00", close:"17:00"}],
 	  phothos:{},
-	  category_id:null
+	  category_name:"entertainment"
     };
 
     db.collection(BUSINESS_PLACE_COLLECTION, function(err, collection) {
@@ -151,7 +152,7 @@ var populateReviewsCollection = function() {
     };
 	
 	 var review2 = {
-      business_place_id:null,
+      business_place_id:"522187dbc768fd8c41000005",
 	  user_id:null,
 	  review:"This place sucks!!!", 
 	  creation_date :new Date(1, 2012)
@@ -326,6 +327,7 @@ exports.addBusinessPlace= function (req,res)
     });	
 }    
 
+
 exports.getBusinessPlaces = function(req, res) {
     console.log('Retrieving business places: ');
 
@@ -374,3 +376,127 @@ exports.dropAllCollections = function(req, res) {
 	drop(CATEGORIES_COLLECTION);
 	res.send("ok");
 };
+
+
+
+exports.getBusinessPlaceByCategory = function(req, res) {
+    var category_name = req.params.category_name;
+    console.log('Retrieving business place with category name: ' + category_name);
+    if (category_name) 
+    {
+    db.collection(BUSINESS_PLACE_COLLECTION, function(err, collection) {
+          collection.find({'category_name':(category_name)}).toArray(function(err, bizPlaces){
+            res.setHeader("Content-Type", "text/plain");
+            console.log("category name"+category_name);
+            console.log("err="+err);
+            console.log("="+bizPlaces);
+            res.send(bizPlaces);
+        });
+    });
+    }
+};
+
+exports.getBusinessPlaceByName = function(req, res) {
+    var biz_name = req.params.biz_name;
+    console.log('Retrieving business place with name: ' + biz_name);
+    if (biz_name) 
+    {
+    db.collection(BUSINESS_PLACE_COLLECTION, function(err, collection) {
+          collection.find({'name':(biz_name)}).toArray(function(err, bizPlaces){
+            res.setHeader("Content-Type", "text/plain");
+            console.log("name"+biz_name);
+            console.log("err="+err);
+            console.log("="+bizPlaces);
+            res.send(bizPlaces);
+        });
+    });
+    }
+};
+
+exports.getReviewsByBizPlaceId = function(req, res) {
+    console.log('Retrieving business place by biz place id');
+    var biz_place_id = req.params.biz_place_id;
+    console.log('Retrieving business place with id: ' + biz_place_id);
+    if (biz_place_id) 
+    {
+        db.collection(REVIEWS_COLLECTION, function(err, collection) {
+              collection.find({'business_place_id':biz_place_id}).toArray(function(err, reviews){
+                console.log("biz place id"+biz_place_id);
+                console.log("err="+err);
+                console.log("="+reviews);
+                res.setHeader("Content-Type", "text/plain");
+                res.send(reviews);
+            });
+        });
+    }
+};
+
+exports.getBusinessPlaceById = function(req, res) {
+    var id = req.params.id;
+    console.log('Retrieving business place with id: ' + id);
+    if (id) 
+    {
+    db.collection(BUSINESS_PLACE_COLLECTION, function(err, collection) {
+          collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
+        //collection.findOne({'sid':(id)}, function(err, item) {
+            res.setHeader("Content-Type", "text/plain");
+            console.log("err="+err);
+            console.log("item="+item);
+            res.send(item);
+        });
+    });
+    }
+};
+
+exports.addReview= function (req,res)
+{
+    if (!req.session.user){
+        res.send("{error:'not logged in'}");
+        return;
+    }
+
+    var review = req.body;
+    review.user_id=req.session.user_id;
+    console.log("in addReview");
+    console.log("review="+review);
+
+    
+    db.collection(REVIEWS_COLLECTION, function(err, collection) {
+        collection.insert(review, {safe:true}, function(err, result) {
+         if (err) {
+                res.send({'error':'An error has occurred'});
+                console.log("error adding review " + err)
+            } else {
+                console.log('result: ' + JSON.stringify(result[0]));
+                res.send(result[0]);
+            }
+        });
+    });
+}
+
+exports.logIn = function(req, res) {
+    var user_name = req.params.name;
+    console.log('Retrieving user with name: ' + user_name);
+    if (user_name) 
+    {
+        db.collection(USERS_COLLECTION, function(err, collection) {
+              collection.findOne({'user_name':user_name}, function(err, item) {
+                res.setHeader("Content-Type", "text/plain");
+                console.log("err="+err);
+                console.log("user " + item);
+                if (item){
+                    req.session.user = user_name;
+                    req.session.user_id = item._id;
+                }
+                res.send(item);
+            });
+        });
+    }
+};
+
+exports.logout = function(req, res) {
+    req.session.user = null;
+    req.session.user_id = null;
+    res.send("{result:'user logged out'}");
+};
+
