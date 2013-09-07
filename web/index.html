@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+    <title>My Page</title>
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+    <link rel="stylesheet" href="./css/jquery.mobile-1.3.2.css">
+    <script src="./js/jquery-1.10.2.js"></script>
+    <script src="./js/jquery.mobile-1.3.2.js"></script>
+    <script src="./js/nearme.js"></script>
+</head>
+<body>
+    <div data-role="page" id="categories_page">
+
+        <div data-role="header">
+            <h1>Near Me</h1>
+        </div><!-- /header -->
+
+
+
+        <div data-role="content" >
+            <<ul id ="categories_ul" data-role="listview" data-inset="true" data-theme="c" >
+        </ul>
+    </div><!-- /content -->
+    <div data-role="footer">
+        <div data-role="controlgroup" data-type="horizontal" >
+            <a class="login_button" href="#login_page" data-role="button" >Login</a>
+            <a class="logout_button" href="#" data-role="button" >Logout</a>
+            <a class="add_place_button" href="#add_place_page" data-role="button" >Add place</a>
+        </div>
+    </div>
+</div><!-- /page -->
+
+<div data-role="page" id="places_page">
+
+    <div data-role="header">
+        <h1>Near Me</h1>
+    </div><!-- /header -->
+
+    <div data-role="content" >
+        <ul id ="places_ul" data-role="listview" data-inset="true" data-theme="c" >
+    </ul>
+</div><!-- /content -->
+
+</div><!-- /page -->
+
+<div data-role="page" id="place_page">
+
+    <div data-role="header">
+        <h1>Near Me</h1>
+    </div><!-- /header -->
+
+    <div data-role="content"  id="place2">
+        <div id="place_name"></div>
+        <div id="place_desc"></div>
+        <div id="open_hours"></div>
+        <div id="open_hours"></div>
+        <div data-role="footer" id="place_footer">
+            <div data-role="controlgroup" data-type="horizontal" >
+                <a class="reviews_page_button" href="#show_reviews_page" data-role="button" >Show Reviews</a>
+                <a class="add_review_page_button" href="#add_review_page" data-role="button" >Add Review</a>
+            </div>
+        </div>
+    </div><!-- /content -->
+
+</div><!-- /page -->
+
+<div data-role="page" id="login_page">
+
+    <div data-role="header">
+        <h1>Near Me</h1>
+    </div><!-- /header -->
+
+    <div data-role="content"  id="login">
+       <div data-role="fieldcontain" class="ui-hide-label">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" value="" placeholder="Username"/>
+        <input class="submit_login_button" type="button" value="login" />
+    </div>
+</div><!-- /content -->
+
+</div><!-- /page -->
+
+
+<div data-role="page" id="add_review_page">
+
+    <div data-role="header">
+        <h1>Near Me</h1>
+    </div><!-- /header -->
+
+    <div data-role="content"  id="add_rev">
+        <div class="add_review_title"></div>
+        <div data-role="fieldcontain">
+            
+            <textarea cols="40" rows="8" name="Review" id="review_text"></textarea>
+            <input class="submit_review_button" type="button" value="add review" />
+        </div>
+    </div><!-- /content -->
+
+</div><!-- /page -->
+
+<div data-role="page" id="show_reviews_page">
+
+    <div data-role="header">
+        <h1>Near Me</h1>
+    </div><!-- /header -->
+
+    <div data-role="content"  >
+        <div id="reviews_list"></div>
+        </div><!-- /content -->
+
+    </div><!-- /page -->
+
+    <div data-role="page" id="add_place_page">
+
+    <div data-role="header">
+        <h1>Near Me</h1>
+    </div><!-- /header -->
+
+    <div data-role="content"  id="add_place">
+        <div class="add_review_title"></div>
+        <div data-role="fieldcontain">
+            
+           <label for="add_place_name">Place name:</label>
+            <input type="text" name="add_place_name" id="add_place_name" value="" placeholder="place "/>
+            <label for="add_place_desc">Place description:</label>
+            <input type="text" name="add_place_desc" id="add_place_desc" value="" placeholder="description "/>
+
+            <label for="add_place_open">Open hour:</label>
+            <input type="time" name="add_place_open" id="add_place_open"/>
+            <label for="add_place_close">Close hour:</label>
+            <input type="time" name="add_place_close" id="add_place_close"/>
+            
+            
+            <div data-role="fieldcontain">
+                <label for="cat_select" class="select">Cateogry:</label>
+                <select name="category_select" id="cat_select" data-native-menu="false">
+                   
+                </select>
+            </div>
+                
+            
+        <input class="submit_add_place_button" type="button" value="add place" />
+
+        </div>
+    </div><!-- /content -->
+
+</div><!-- /page -->
+
+
+</body>
+</html>

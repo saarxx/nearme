@@ -500,3 +500,13 @@ exports.logout = function(req, res) {
     res.send("{result:'user logged out'}");
 };
 
+exports.getCategories = function(req, res) {
+    console.log('Retrieving business places: ');
+
+    db.collection(CATEGORIES_COLLECTION, function(err, collection) {
+        collection.find().toArray(function(err, items) {
+            res.send(items);
+        });
+    });
+};
+

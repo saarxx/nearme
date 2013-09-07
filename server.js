@@ -4,12 +4,24 @@ var port = (process.env.VMC_APP_PORT || 3000);
 var host = (process.env.VCAP_APP_HOST || 'localhost');
 
 var app = express();
+
+
 app.configure(function () {
     app.use(express.logger('dev'));    
     app.use(express.bodyParser());
     app.use(express.cookieParser());
     app.use(express.session({secret: '1234'}));
+    app.use(express.static(__dirname + '/web/'));
 });
+app.all('/*',function(req,res,next){
+    res.header('Access-Control-Allow-Origin' , '*' );
+    next(); 
+});
+app.get('/*',function(req,res,next){
+    res.header('Access-Control-Allow-Origin' , '*' );
+    next(); 
+});
+
 
 app.get('/users/:id',nearme.getUser);
 app.get('/users/name/:user_name',nearme.getUserByName);
@@ -34,5 +46,7 @@ app.get('/drop_all_collections',nearme.dropAllCollections);
 
 app.post('/users/login/:name',nearme.logIn);
 app.post('/users/logout/',nearme.logout);
+app.get('/categories',nearme.getCategories);
+
 
 app.listen(port,host);
