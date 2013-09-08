@@ -1,13 +1,11 @@
 var stack = []
 var user;
 
-var site_url = 'http://localhost:3000';
+var site_url = '';
 $(function() {
 
 
     initCategoriesPage();
-
-
 
 
      $("#categories_page").on('pageshow', function() {
@@ -33,10 +31,20 @@ $(function() {
         // alert(user);
         initPlacesList(category);
     });
-
     $("#place_page").on('pageinit', function() {
-        var place = stack.pop();
-        initPlacePage(place);
+        var place_name = stack.pop();
+
+                $.ajax({
+            url: site_url + '/business_places/name/'+place_name,
+            type:'GET',
+            dataType:'json',
+            success: function(data) {
+                initPlacePage(data[0]);
+            
+        }
+
+    });
+        
         // console.log(place.name);
 
     });
@@ -187,8 +195,9 @@ $(document).on("click", '.add_place_button', function(event, ui) {
 
 
 $(document).on("click", '.place_li', function(event, ui) {
-    var place = $.data(this, "object");
-    stack.push(place);
+    // var place = $.data(this, "object");
+    // stack.push(place);
+    stack.push(event.target.innerText);
 })
 
 $(document).on("click", '.submit_login_button', function(event, ui) {
@@ -304,7 +313,6 @@ $(document).on("click", '.submit_review_button', function(event, ui) {
 
 });
 
-
 $(document).on("click", '.submit_add_place_button', function(event, ui) {
 
 
@@ -340,6 +348,47 @@ $(document).on("click", '.submit_add_place_button', function(event, ui) {
 });
 
 });
+
+
+$(document).on("click", '.submit_signin_button', function(event, ui) {
+
+    var user = new Object();
+    user.first_name = $("#firstname").val();
+    user.last_name = $("#lastname").val();
+    user.user_name = $("#signin_username").val();
+    user.address = new Object();
+    user.address.city = $("#signin_city").val();
+    user.address.street = $("#signin_street").val();
+    user.address.street_no = $("#signin_street_no").val();
+
+
+    $.ajax({
+        url: site_url + '/users',
+        type:'POST',
+        data: user,
+        success: function(data) {
+            // stack.push(place);
+
+            $.mobile.changePage($("#categories_page"), {
+                    allowSamePageTransition: true,
+                    transition: 'none',
+                    reloadPage: true    
+                });
+
+            initCategoriesPage();
+
+       },
+       error:function(data) {
+        alert(1);
+    }
+
+});
+
+});
+
+
+
+
 
 
 
