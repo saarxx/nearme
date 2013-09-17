@@ -23,6 +23,16 @@ $(function() {
         initCategoriesPage();
     });
 
+    $('.findme').click(function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(success, error);
+                } else {
+                    error('Geolocation not supported');
+                }
+            });
+
+
+
  
 
 
@@ -66,6 +76,32 @@ $(function() {
 
 
 });
+
+ function success(position) {
+          var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          var myOptions = {
+            zoom: 15,
+            center: latlng,
+            mapTypeControl: false,
+            navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+          };
+          var mapcanvas = $('#mapcanvas');
+          var map = new google.maps.Map(mapcanvas[0], myOptions);
+          var marker = new google.maps.Marker({
+              position: latlng, 
+              map: map, 
+              title:"I am here!"
+          });
+        }
+        
+
+        function error(msg) {
+          var errMsg = typeof msg == 'string' ? msg : "Geolocation failed";
+          $('#msg').html(errMsg);
+        }
+
+
 
 function initAddPlacePage() {
     var cats = stack.pop();

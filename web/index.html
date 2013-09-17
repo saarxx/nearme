@@ -7,8 +7,31 @@
     <script src="./js/jquery-1.10.2.js"></script>
     <script src="./js/jquery.mobile-1.3.2.js"></script>
     <script src="./js/nearme.js"></script>
+    <script src="./js/shake.js"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?<KEY>&sensor=false"></script>
+
 </head>
 <body>
+
+<script type="text/javascript">
+
+
+window.onload = function() {
+
+    window.addEventListener('shake', shakeEventDidOccur, false);
+
+    //define a custom method to fire when shake occurs.
+    function shakeEventDidOccur () {
+
+        //put your own code here etc.
+        if (confirm("Undo?")) {
+
+        }
+    }
+};
+</script>
+
+
     <div data-role="page" id="categories_page">
 
         <div data-role="header">
@@ -16,6 +39,8 @@
         </div><!-- /header -->
 
 
+        <div id="msg"></div>
+            <div id="mapcanvas" style="height: 400px; width: 560px;"></div>
 
         <div data-role="content" >
             <ul id ="categories_ul" data-role="listview" data-inset="true" data-theme="c" >
@@ -28,6 +53,7 @@
             <a class="signin_button" href="#signin_page" data-role="button" >SignUp</a>
             
             <a class="add_place_button" href="#add_place_page" data-role="button" >Add place</a>
+            <a class="findme" href="#" data-role="button" >find me</a>
         </div>
     </div>
 </div><!-- /page -->
@@ -43,7 +69,11 @@
     </ul>
 </div><!-- /content -->
 
+
+
 </div><!-- /page -->
+
+
 
 <div data-role="page" id="place_page">
 
